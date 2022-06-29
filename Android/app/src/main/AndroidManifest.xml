@@ -22,6 +22,10 @@
         </activity>
 
         <activity android:name=".TestActivity" />
+        <activity android:name=".test.SecondActivity"/>
+        <activity android:name=".test.ThirdActivity"/>
+        <activity android:name=".test.FourthActivity"/>
+        <activity android:name=".test.FiveActivity"/>
 
     </application>
 

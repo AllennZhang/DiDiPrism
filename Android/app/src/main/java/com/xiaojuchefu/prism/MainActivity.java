@@ -1,12 +1,15 @@
 package com.xiaojuchefu.prism;
 
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -19,6 +22,7 @@ import com.xiaojuchefu.prism.monitor.model.EventData;
 import com.xiaojuchefu.prism.playback.PlaybackHelper;
 import com.xiaojuchefu.prism.playback.PrismPlayback;
 import com.xiaojuchefu.prism.playback.model.EventInfo;
+import com.xiaojuchefu.prism.test.SecondActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 stopButton.setEnabled(true);
                 playbackLayout.setVisibility(View.GONE);
 
-                startActivity(new Intent(MainActivity.this, TestActivity.class));
+                startActivity(new Intent(MainActivity.this, SecondActivity.class));
             }
         });
         stopButton.setOnClickListener(new View.OnClickListener() {
@@ -80,9 +84,27 @@ public class MainActivity extends AppCompatActivity {
                 playbackLayout.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        navToSecondActivity();
                         PrismPlayback.getInstance().playback(mPlaybackEvents);
+
                     }
                 }, 1000);
+            }
+        });
+
+        findViewById(R.id.btnTest).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText editText = findViewById(R.id.etTest);
+                String url = editText.getText().toString().trim();
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(url));
+                ComponentName componentName = intent.resolveActivity(getPackageManager());
+                if (componentName != null){
+                    Log.e("MainActivity"," action view resolved componentName="+componentName);
+                    MainActivity.this.startActivity(intent);
+                }
             }
         });
 
@@ -161,6 +183,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void navToSecondActivity() {
+        String activityName = "com.xiaojuchefu.prism.test.SecondActivity";
+        Intent intent = new Intent();
+        intent.setClassName(this,activityName);
+        this.startActivity(intent);
     }
 
 }
